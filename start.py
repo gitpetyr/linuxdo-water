@@ -11,6 +11,9 @@ CRAWLER_SCRIPT = "main.py"  # 爬取器主脚本的文件名
 VISITOR_SCRIPT = "tpread.py"  # 水帖器脚本的文件名 (修改这里)
 WAIT_BEFORE_VISITOR = 10  # 启动爬取器后，等待多少秒再启动水帖器
 
+DEFAULT_VENV_PY = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".venv", "bin", "python")
+PYTHON_EXECUTABLE = os.getenv("PROJECT_PYTHON", DEFAULT_VENV_PY if os.path.exists(DEFAULT_VENV_PY) else sys.executable)
+
 # --- 用户名和密码配置 ---
 USERNAME = "petyr"  # 在这里配置用户名
 PASSWORD = "your_actual_password_here" # 在这里配置密码，请确保安全性
@@ -39,7 +42,7 @@ def run_script(script_name, process_name, stop_event, wait_time=0, env_vars=None
             env.update(env_vars) # 添加或覆盖特定环境变量
 
         # 使用 Popen 启动进程，并捕获输出（可选）
-        proc = subprocess.Popen(['python', script_name],
+        proc = subprocess.Popen([PYTHON_EXECUTABLE, script_name],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
                                 text=True,
